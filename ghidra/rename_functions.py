@@ -71,9 +71,13 @@ def get_callers(function):
     callers = set()
 
     # getReferencesTo returns all references (calls, jumps, data pointers)
-    refs = getReferencesTo(address)
+    # refs = getReferencesTo(address) # only gives 4096 references max
 
-    for ref in refs:
+    refManager = current_program.getReferenceManager()
+    refIterator = refManager.getReferencesTo(address)
+
+    while refIterator.hasNext():
+        ref = refIterator.next()
         # We only care about code execution flows (CALL instructions)
         if ref.getReferenceType().isCall():
             # Find which function contains the instruction making the call
