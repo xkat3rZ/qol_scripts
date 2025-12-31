@@ -1,3 +1,9 @@
+## Configuration
+
+1. `handle SIGALRM nostop print nopass`
+
+	1. Don't stop on SIGALRM
+
 ## Starting GDB and Remote Debugging
 
 These commands cover local execution and remote debugging using `gdbserver`.
@@ -187,17 +193,25 @@ Use the `x` command: `x/<count><format><size> <address>`.
     
     1. Print the assembly instruction at the program counter.
         
-6. `x/gb <address>`
+6. `x/10i $pc`
+    
+    1. Print the next 10 assembly instructions starting from the program counter.[](https://visualgdb.com/gdbreference/commands/x)​
+        
+7. `x/gb <address>`
     
     1. Print one giant (8 bytes) as hex.
         
-7. `x/4db <address>`
+8. `x/4db <address>`
     
     1. Print 4 bytes as signed decimal numbers.
         
-8. `print *(struct <name> *) <address>`
+9. `print *(struct <name> *) <address>`
     
     1. Cast a specific memory address to a C structure and display its fields (e.g., `print *(struct user *) 0x602010`).
+        
+10. `set {char[4]} 0x8040000 = "Ace"`
+    
+    1. Write a string directly to a specific memory address.​
         
 
 ## Registers and Flags

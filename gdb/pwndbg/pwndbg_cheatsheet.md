@@ -1,4 +1,18 @@
-## Starting and Configuration
+## Configuration
+
+1. `set context-code-lines 30`
+
+	1. Show more disassembly lines
+
+2. `set context-source-code-lines 30`
+
+	1. Show more source code lines
+
+3. `set context-stack-lines 12`
+
+	1. Show more stack lines
+
+## Starting
 
 Standard GDB commands work, but `pwndbg` adds automatic context and security checks.
 
@@ -141,23 +155,29 @@ Tools specifically for generating payloads and finding offsets.
         
     2. Example: Crash the app with `cyclic`, then `cyclic -l 0x6161616c` to find the buffer overflow offset.
         
-3. `rop`
+3. `distance <addr>`
+    
+    1. Calculate the offset (distance) between `<addr>` and the base address of loaded modules.[](https://pwndbg.re/dev/CHEATSHEET.pdf)​
+        
+    2. Essential for identifying ASLR offsets from leaked pointers (e.g., `distance 0x7ffff7e1a250`).
+        
+4. `rop`
     
     1. Dump available ROP gadgets from the binary.
         
-4. `rop --grep <inst>`
+5. `rop --grep <inst>`
     
     1. Search for specific ROP gadgets (e.g., `rop --grep "pop rdi"`).
         
-5. `shellcode`
+6. `shellcode`
     
     1. Generate or print shellcode for the current architecture.
         
-6. `canary`
+7. `canary`
     
     1. Print the value of the stack canary if known.
         
-7. `got`
+8. `got`
     
     1. Print the Global Offset Table (GOT) entries and their resolved addresses.
         
@@ -168,6 +188,16 @@ Tools specifically for generating payloads and finding offsets.
     
     1. Standard GDB, but `pwndbg` validates the address against memory maps.
         
-2. `hardware <addr>` (or `hb`)
+2. `brva <offset> [module]` (or `breakrva`)
+    
+    1. Break at a Relative Virtual Address (RVA) from the PIE base.​
+        
+    2. Calculates the actual address by adding the offset to the module's base address.​
+        
+    3. Example: `brva 0x1234` (break at base + 0x1234 in the main executable).
+        
+    4. Example: `brva 0x5678 libc` (break at offset 0x5678 in libc module).
+        
+3. `hardware <addr>` (or `hb`)
     
     1. Set a hardware breakpoint (often more reliable for write-watchers).
