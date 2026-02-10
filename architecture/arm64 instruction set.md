@@ -229,5 +229,66 @@ ADRP X0, msg_label  ; Get page address of message
 ADD X0, X0, :lo12:msg_label ; Add lower 12-bit offset
 ```
 
+***
+### **8. Registers** [^3]
+
+ARM64 (also known as AArch64) uses a standardized calling convention defined in the Procedure Call Standard for the ARM 64-bit Architecture (AAPCS64).
+#### Register Usage
+
+##### General-Purpose Registers
+
+- **x0-x7**: Used for passing the first 8 integer or pointer arguments to functions. These registers are also used for return values, with x0 containing the primary return value.[](https://hackeradam.com/aarch64-calling-conventions/)
+    
+- **x8**: Serves as an indirect result location register, used when returning structures larger than 16 bytes.[](https://duetorun.com/blog/20230615/a64-pcs-demo/)
+    
+- **x9-x15**: Temporary (caller-saved) registers that can be used freely within a function without preservation.[](https://dede.dev/posts/ARM64-Calling-Convention-Cheat-Sheet/)
+    
+- **x16-x17**: Intra-procedure-call temporary registers.[](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf)​
+    
+- **x19-x29**: Callee-saved registers that must be preserved and restored by the called function if used.[](https://stackoverflow.com/questions/68721134/linux-arm64-calling-convention-what-registers-need-saving-by-callee)
+    
+- **x29**: Frame pointer (FP).[](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf)​
+    
+- **x30**: Link register (LR), holds the return address.[](https://duetorun.com/blog/20230615/a64-pcs-demo/)​
+    
+- **sp**: Stack pointer, must remain 16-byte aligned.[](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf)​
+    
+#### Vector/SIMD Registers
+
+- **v0-v7**: Used for passing the first 8 floating-point or SIMD arguments. Also used for floating-point return values.[](https://hackeradam.com/aarch64-calling-conventions/)
+    
+- **v8-v15**: Lower 64 bits must be preserved by callee if used.[](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf)​
+    
+- **v16-v31**: Temporary registers that don't need preservation.[](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf)​
+    
+#### Argument Passing
+
+##### Standard Functions
+
+- The first 8 integer/pointer arguments go in x0-x7[](https://dede.dev/posts/ARM64-Calling-Convention-Cheat-Sheet/)
+    
+- The first 8 floating-point/SIMD arguments go in v0-v7[](https://hackeradam.com/aarch64-calling-conventions/)
+    
+- Additional arguments beyond the first 8 are passed on the stack[](https://duetorun.com/blog/20230615/a64-pcs-demo/)
+    
+- Stack arguments are pushed in reverse order, with each argument occupying at least 8 bytes (even if smaller)[](https://duetorun.com/blog/20230615/a64-pcs-demo/)​
+    
+#### Variadic Functions
+
+For functions with variable arguments (using `...`), some implementations like ARM64EC use only the first 4 registers (x0-x3) for parameter passing, with remaining parameters spilled to the stack.[](https://learn.microsoft.com/en-us/windows/arm/arm64ec-abi)​
+
+#### Return Values
+
+- Integer and pointer return values use x0 (or x0-x1 for larger values)[](https://cintaprogramming.com/2022/01/16/calling-convention-pada-amd64-arm64-dan-riscv64/)
+    
+- Floating-point return values use v0[](https://student.cs.uwaterloo.ca/~cs452/docs/rpi4b/aapcs64.pdf)​
+    
+- Structures larger than 16 bytes are returned via memory pointed to by x8[](https://dede.dev/posts/ARM64-Calling-Convention-Cheat-Sheet/)
+    
+#### Stack Alignment
+
+The stack pointer must be 16-byte aligned at public function call boundaries. When allocating stack space for arguments, the total allocation must be a multiple of 16 bytes.
+
 [1](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/96616222/c32db14c-8159-4753-8060-75e3a784fad2/Stephen-Smith-Programming-with-64-Bit-ARM-Assembly-Language_-Single-Board-Computer-Development-for-Raspberry-Pi-and-Mobile-Devices-2020-Apress-10.1007_978-1-4842-5881-1-libgen.li-1.pdf)
 [2](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/96616222/95d63b2c-f3a2-4f56-98eb-1353676524c4/The-Art-of-ARM-Assembly-Volume-1-for-Candi-Bara.pdf)
+[3](https://ohyaan.github.io/assembly/functions_and_stack_management_in_arm64_assembly/#aapcs64-overview)
