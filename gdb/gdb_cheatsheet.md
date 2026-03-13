@@ -121,16 +121,26 @@ Control where the program stops based on location or data changes.
 7. `watch *<address>`
     
     1. Pause execution when a memory address is modified.
-        
-8. `delete <id>`
+
+
+8. `rwatch <variable>`  
+		
+	1. Pause execution when a variable is read. Requires hardware watchpoint support.
+
+9. `rwatch *<address>`  
+
+	1. Pause execution when a memory address is read.
+
+
+10. `delete <id>`
     
     1. Delete the breakpoint with the specified ID.
         
-9. `disable <id>`
+11. `disable <id>`
     
     1. Temporarily disable a breakpoint.
         
-10. `enable <id>`
+12. `enable <id>`
     
     1. Re-enable a disabled breakpoint.
         
@@ -287,6 +297,8 @@ Inspect and modify CPU registers and status flags. For x86/x64, flags are bits i
 ## Calling Conventions (Parameter Passing)
 
 Reference for where function arguments and return values are stored by default for common architectures.
+
+Note: When calling system calls, `RAX` is the syscall number
 
 1. **x86_64 System V ABI (Linux, macOS, BSD)**
     
