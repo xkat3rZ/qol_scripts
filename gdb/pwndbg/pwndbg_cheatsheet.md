@@ -12,6 +12,10 @@
 
 	1. Show more stack lines
 
+4. `set show-flags on`
+
+    1. Show register flags
+
 ## Starting
 
 Standard GDB commands work, but `pwndbg` adds automatic context and security checks.
@@ -27,6 +31,7 @@ Standard GDB commands work, but `pwndbg` adds automatic context and security c
 3. `vmmap`
     
     1. Display the virtual memory mapping (replaces `info proc mappings` with a color-coded, easier-to-read table).
+    2. E.g. vmmap libXXX.so
         
 4. `entry`
     
@@ -201,3 +206,8 @@ Tools specifically for generating payloads and finding offsets.
 3. `hardware <addr>` (or `hb`)
     
     1. Set a hardware breakpoint (often more reliable for write-watchers).
+
+4. `setflag FL 0/1`
+
+    1. Set flags to 0 or 1
+    2. E.g. `setflag ZF 0`
